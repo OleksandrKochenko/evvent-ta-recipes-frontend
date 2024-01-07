@@ -25,7 +25,7 @@ export default function Home() {
 
   return (
     <main className="bg-gray-50 dark:bg-gray-900 flex min-h-screen flex-col items-center justify-between pt-10 pb-2">
-      <h1 className="text-2xl ">Welcome to Recipes App</h1>
+      <h1 className="text-2xl ">Welcome to Recipes App!</h1>
       <div className="flex w-3/4 justify-between">
         <div className="text-left w-2/5">
           <p>
