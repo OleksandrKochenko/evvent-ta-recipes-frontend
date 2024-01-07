@@ -1,22 +1,36 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/button";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export default function Home() {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const router = useRouter();
+
+  const handleClick = (link: string) => {
+    router.push(link);
+  };
+
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  console.log(isLoggedIn);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between pt-10 pb-2">
+    <main className="bg-gray-50 dark:bg-gray-900 flex min-h-screen flex-col items-center justify-between pt-10 pb-2">
       <h1 className="text-2xl ">Welcome to Recipes App</h1>
       <div className="flex w-3/4 justify-between">
-        <p className="text-left w-2/5">
-          This is a pet-project developed in order to complete a test
-          assignment.{" "}
+        <div className="text-left w-2/5">
+          <p>
+            This is a pet-project developed in order to complete a test
+            assignment.{" "}
+          </p>
           <p>
             Only authorized users are allowed to perform CRUD Operations. Please
             register or log in to use this App.
           </p>
-        </p>
+        </div>
         <p className="text-left w-2/5">
           BackEnd API of the project is placed on free instance web-service.{" "}
           <br />
@@ -25,7 +39,24 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex"></div>
+      <div className="max-w-3xl w-full items-center justify-between font-mono text-sm lg:flex">
+        <Button
+          title="Register"
+          onClick={() => handleClick("user/signup")}
+          disabled={isLoggedIn}
+        />
+        <Button
+          title="Log In"
+          onClick={() => handleClick("user/signin")}
+          disabled={isLoggedIn}
+        />
+        <Button
+          title="Log Out"
+          onClick={() => console.log("clicked")}
+          disabled={!isLoggedIn}
+        />
+      </div>
+
       <div className="mb-32 grid text-center lg:max-w-6xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
         <div
           onClick={() => setExpanded(!expanded)}
