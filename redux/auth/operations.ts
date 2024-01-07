@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { RootState } from "../store";
 
 axios.defaults.baseURL = "https://evvent-ta-recipes.onrender.com/";
 
@@ -14,7 +15,7 @@ const authHeader = {
 
 export const register = createAsyncThunk(
   "auth/signup",
-  async (credentials, thunkAPI) => {
+  async (credentials: {}, thunkAPI) => {
     try {
       const { data } = await axios.post("auth/signup", credentials);
       return data;
@@ -27,7 +28,7 @@ export const register = createAsyncThunk(
 
 export const logIn = createAsyncThunk(
   "auth/signin",
-  async (credentials, thunkAPI) => {
+  async (credentials: {}, thunkAPI) => {
     try {
       const { data } = await axios.post("/auth/signin", credentials);
       authHeader.set(data.token);
@@ -47,3 +48,25 @@ export const logOut = createAsyncThunk("/auth/signout", async (_, thunkAPI) => {
     if (error instanceof Error) return thunkAPI.rejectWithValue(error.message);
   }
 });
+
+export const refreshUser = createAsyncThunk(
+  "auth/refresh",
+  async (_, thunkAPI) => {
+    const state: RootState = thunkAPI.getState() as RootState;
+    const persistedToken = state.auth.token;
+
+    if (persistedToken === null) {
+      return thunkAPI.rejectWithValue("Unable to fetch user");
+    }
+
+    try {
+      authHeader.set(persistedToken);
+      const { data } = await axios.get("/auth/current");
+
+      return data;
+    } catch (error) {
+      if (error instanceof Error)
+        return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);

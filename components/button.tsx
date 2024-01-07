@@ -4,7 +4,7 @@ export const Button = ({
   type = "button",
   disabled = false,
 }: {
-  onClick: () => void;
+  onClick?: () => void;
   title: string;
   type?: "submit" | "reset" | "button";
   disabled?: boolean;

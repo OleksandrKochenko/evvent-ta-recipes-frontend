@@ -1,14 +1,12 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { ReduxProvider } from "@/redux/provider";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor } from "@/redux/store";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Recipe App",
-  description: "Test assignment pet-project for Evvent",
-};
 
 export default function RootLayout({
   children,
@@ -18,7 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <PersistGate loading={null} persistor={persistor}>
+            {children}
+          </PersistGate>
+        </ReduxProvider>
       </body>
     </html>
   );

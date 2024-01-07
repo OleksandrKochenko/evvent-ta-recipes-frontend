@@ -1,21 +1,27 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { refreshUser } from "@/redux/auth/operations";
 
 export default function Home() {
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(refreshUser());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClick = (link: string) => {
     router.push(link);
   };
 
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-  console.log(isLoggedIn);
 
   return (
     <main className="bg-gray-50 dark:bg-gray-900 flex min-h-screen flex-col items-center justify-between pt-10 pb-2">
